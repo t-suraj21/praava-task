@@ -1,12 +1,10 @@
 @import "tailwindcss";
 
-/* Dark mode driven by the `.dark` class on <html> */
 @variant dark (&:where(.dark, .dark *));
 
-/* ─── CSS Variables ────────────────────────────────────────────────────── */
 :root {
-  --bg:        #eef0f9;
-  --fg:        #1e1b4b;
+  --bg: #eef0f9;
+  --fg: #1e1b4b;
   --font-sans: var(--font-sans);
 }
 
@@ -15,7 +13,6 @@
   --fg: #f1f5f9;
 }
 
-/* ─── Base ─────────────────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -35,8 +32,7 @@ body {
   transition: background-color 0.45s ease, color 0.3s ease;
 }
 
-/* ─── Scrollbar ────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar            { width: 6px; }
 ::-webkit-scrollbar-track      { background: transparent; }
-::-webkit-scrollbar-thumb      { background: rgba(156,163,175,.3); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover{ background: rgba(156,163,175,.5); }
+::-webkit-scrollbar-thumb      { background: rgba(156, 163, 175, 0.3); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover{ background: rgba(156, 163, 175, 0.5); }

@@ -13,50 +13,53 @@ import {
 import { FloatingCard } from "./components/FloatingCard";
 import { PortalCard } from "./components/PortalCard";
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Fixed canvas dimensions (in px). Cards are placed at absolute pixel
-   positions mirroring the reference screenshot. A CSS scale() shrinks
-   the whole canvas on smaller viewports — the layout stays identical.
-   Card width = 340 px, so max right edge = left + 340 (≤ CANVAS_W).
-───────────────────────────────────────────────────────────────────────── */
 const CANVAS_W = 840;
 const CANVAS_H = 520;
 
-/* ── Framer Motion variants for the left text panel ─────────────────────── */
 const textContainer = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
 };
+
 const textLine = {
   hidden: { opacity: 0, x: -36 },
-  show:   { opacity: 1, x:   0, transition: { duration: 0.7, ease: "easeOut" as const } },
+  show: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 };
 
 export default function Home() {
-  const [dark, setDark] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
-  /* Initialise from localStorage / system preference */
   useEffect(() => {
-    const saved       = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark      = saved === "dark" || (!saved && prefersDark);
-    setDark(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
+    const savedTheme = localStorage.getItem("theme");
+    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldBeDark = savedTheme === "dark" || (!savedTheme && systemPrefersDark);
+
+    setIsDark(shouldBeDark);
+    document.documentElement.classList.toggle("dark", shouldBeDark);
   }, []);
 
-  const toggleDark = () => {
-    const next = !dark;
-    setDark(next);
+  function toggleDarkMode() {
+    const next = !isDark;
+    setIsDark(next);
     localStorage.setItem("theme", next ? "dark" : "light");
     document.documentElement.classList.toggle("dark", next);
-  };
+  }
+
+  const backgroundBlobs = [
+    { top: "16%", right: "-7%", width: "210px", height: "54px", delay: 0.2 },
+    { top: "37%", right: "-11%", width: "290px", height: "64px", delay: 0.35 },
+    { top: "58%", right: "-7%", width: "190px", height: "50px", delay: 0.5 },
+    { top: "46%", left: "-13%", width: "145px", height: "44px", delay: 0.3 },
+    { top: "67%", left: "-9%", width: "225px", height: "56px", delay: 0.45 },
+    { bottom: "9%", left: "5%", width: "310px", height: "68px", delay: 0.6 },
+  ];
 
   return (
     <div
       className="
         min-h-screen
         bg-[#eef0f9] dark:bg-[#0b0f19]
-        text-[#1e1b4b]  dark:text-slate-100
+        text-[#1e1b4b] dark:text-slate-100
         transition-colors duration-500
         flex flex-col lg:flex-row
         items-center justify-center
@@ -67,39 +70,19 @@ export default function Home() {
         gap-12 lg:gap-0
       "
     >
+      {backgroundBlobs.map((style, index) => (
+        <motion.div
+          key={index}
+          className="absolute rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
+          style={style as React.CSSProperties}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: style.delay, duration: 0.8 }}
+        />
+      ))}
 
-      {/* ── Decorative background blobs ─────────────────────────────────── */}
-      {/* Right-side pill blobs */}
-      <motion.div
-        className="absolute top-[16%] right-[-7%] w-[210px] h-[54px] rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.8 }}
-      />
-      <motion.div
-        className="absolute top-[37%] right-[-11%] w-[290px] h-[64px] rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35, duration: 0.8 }}
-      />
-      <motion.div
-        className="absolute top-[58%] right-[-7%] w-[190px] h-[50px] rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.8 }}
-      />
-      {/* Left-side pill blobs */}
-      <motion.div
-        className="absolute top-[46%] left-[-13%] w-[145px] h-[44px] rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.8 }}
-      />
-      <motion.div
-        className="absolute top-[67%] left-[-9%] w-[225px] h-[56px] rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45, duration: 0.8 }}
-      />
-      {/* Bottom blob */}
-      <motion.div
-        className="absolute bottom-[9%] left-[5%] w-[310px] h-[68px] rounded-full bg-[#d4dcf7] dark:bg-slate-800/20 pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 0.8 }}
-      />
-
-      {/* ── Dark mode toggle ─────────────────────────────────────────────── */}
       <motion.button
-        onClick={toggleDark}
+        onClick={toggleDarkMode}
         aria-label="Toggle dark mode"
         className="
           absolute top-5 right-5 z-30
@@ -117,23 +100,16 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.4 }}
       >
-        {dark
-          ? <Sun  size={18} className="text-amber-400" />
-          : <Moon size={18} />
-        }
+        {isDark ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} />}
       </motion.button>
 
-      {/* ── LEFT: Headline + sub-text ────────────────────────────────────── */}
       <motion.div
         className="relative z-10 w-full lg:w-[44%] shrink-0 flex flex-col items-start gap-7"
         variants={textContainer}
         initial="hidden"
         animate="show"
       >
-        {/* Heading block */}
         <div className="flex flex-col" style={{ lineHeight: 1.12 }}>
-
-          {/* Line 1 — light grey, regular weight */}
           <motion.h1
             variants={textLine}
             className="
@@ -146,7 +122,6 @@ export default function Home() {
             A single platform to
           </motion.h1>
 
-          {/* Line 2 — dark navy, "manage" bold */}
           <motion.h1
             variants={textLine}
             className="
@@ -159,7 +134,6 @@ export default function Home() {
             <strong className="font-extrabold">manage</strong> every part of
           </motion.h1>
 
-          {/* Line 3 — dark navy, "legal work" bold */}
           <motion.h1
             variants={textLine}
             className="
@@ -173,7 +147,6 @@ export default function Home() {
           </motion.h1>
         </div>
 
-        {/* Sub-text */}
         <motion.p
           variants={textLine}
           className="
@@ -188,47 +161,25 @@ export default function Home() {
         </motion.p>
       </motion.div>
 
-      {/* ── RIGHT: Floating card canvas ──────────────────────────────────── */}
-      {/*
-        The canvas is always CANVAS_W × CANVAS_H px internally.
-        CSS scale() compresses it proportionally on narrow viewports so the
-        exact rotations, overlaps and card sizes are preserved at every breakpoint.
-      */}
       <div className="relative z-10 w-full lg:w-[56%] flex items-center justify-center">
-
-        {/* Shell — reserves the correct layout space after scale */}
         <div
           style={{
-            width:    `min(${CANVAS_W}px, 92vw)`,
-            height:   `min(${CANVAS_H}px, calc(92vw * ${CANVAS_H} / ${CANVAS_W}))`,
+            width: `min(${CANVAS_W}px, 92vw)`,
+            height: `min(${CANVAS_H}px, calc(92vw * ${CANVAS_H} / ${CANVAS_W}))`,
             position: "relative",
           }}
         >
-          {/* Fixed inner canvas — scaled to viewport */}
           <div
             style={{
-              position:        "absolute",
-              top:             0,
-              left:            0,
-              width:           CANVAS_W,
-              height:          CANVAS_H,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: CANVAS_W,
+              height: CANVAS_H,
               transformOrigin: "top left",
-              scale:           `min(1, calc(min(${CANVAS_W}px, 92vw) / ${CANVAS_W}px))`,
+              scale: `min(1, calc(min(${CANVAS_W}px, 92vw) / ${CANVAS_W}px))`,
             }}
           >
-
-            {/*
-              Card positions (top, left) chosen to replicate reference screenshot.
-              Each card is 340 px wide; all must satisfy left + 340 ≤ 840.
-
-                Billing   : (30,  370) → right edge 710 ✓
-                Matters   : (200,   8) → right edge 348 ✓
-                Portal    : (208, 388) → right edge 728 ✓  (zIndex 10 → on top)
-                Tasks     : (375, 165) → right edge 505 ✓
-                Documents : (382, 480) → right edge 820 ✓
-            */}
-
-            {/* ── 1. Billing — top-right, −10° ─────────────────────────── */}
             <div className="absolute" style={{ top: 30, left: 370 }}>
               <FloatingCard
                 color="blue"
@@ -242,7 +193,6 @@ export default function Home() {
               />
             </div>
 
-            {/* ── 2. Matters — mid-left, +12° ──────────────────────────── */}
             <div className="absolute" style={{ top: 200, left: 8 }}>
               <FloatingCard
                 color="orange"
@@ -256,7 +206,6 @@ export default function Home() {
               />
             </div>
 
-            {/* ── 3. John Doe – Portal — center-right, −5° ─────────────── */}
             <div className="absolute" style={{ top: 208, left: 388, zIndex: 10 }}>
               <FloatingCard
                 color="lavender"
@@ -270,7 +219,6 @@ export default function Home() {
               </FloatingCard>
             </div>
 
-            {/* ── 4. Tasks — bottom-center, −8° ────────────────────────── */}
             <div className="absolute" style={{ top: 378, left: 165 }}>
               <FloatingCard
                 color="dark"
@@ -284,7 +232,6 @@ export default function Home() {
               />
             </div>
 
-            {/* ── 5. Documents — bottom-right, +8° ─────────────────────── */}
             <div className="absolute" style={{ top: 385, left: 480 }}>
               <FloatingCard
                 color="dark"
@@ -297,11 +244,9 @@ export default function Home() {
                 floatPx={15}
               />
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
   );
 }

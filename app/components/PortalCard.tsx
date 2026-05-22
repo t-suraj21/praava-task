@@ -2,20 +2,11 @@
 
 import React from "react";
 
-/**
- * PortalCard — the "John Doe – Portal" variant card content.
- *
- * Sits inside <FloatingCard color="lavender"> as children.
- * Inner width = card shell (340px) − horizontal padding (px-8 × 2 = 64px) = 276px.
- */
 export function PortalCard() {
   return (
     <div className="flex items-center gap-3 w-[276px]">
-
-      {/* Orange accent bar */}
       <div className="w-[5px] h-12 rounded-full bg-[#d47030] shrink-0" />
 
-      {/* Avatar circle */}
       <div className="w-14 h-14 rounded-full bg-[#dde4ff] dark:bg-indigo-900 border-2 border-white/50 dark:border-indigo-400/30 shrink-0 overflow-hidden flex items-center justify-center shadow-md">
         <svg
           viewBox="0 0 100 100"
@@ -23,46 +14,34 @@ export function PortalCard() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Hair back */}
           <path
             d="M25 45C25 25 35 15 50 15C65 15 75 25 75 45C75 45 78 50 78 55C75 58 72 58 72 58C72 58 70 42 50 42C30 42 28 58 28 58C28 58 25 58 22 55C22 50 25 45 25 45Z"
             fill="#1e1b4b"
           />
-          {/* Ears */}
           <circle cx="21" cy="52" r="7" fill="#8c583c" />
           <circle cx="79" cy="52" r="7" fill="#8c583c" />
-          {/* Face */}
           <path
             d="M50 24C34 24 30 35 30 52C30 68 39 76 50 76C61 76 70 68 70 52C70 35 66 24 50 24Z"
             fill="#9c6644"
           />
-          {/* Beard */}
           <path
             d="M30 56C30 68 39 80 50 80C61 80 70 68 70 56C70 64 63 74 50 74C37 74 30 64 30 56Z"
             fill="#2d221c"
           />
-          {/* Whites of eyes */}
           <circle cx="41" cy="48" r="5" fill="#f8fafc" />
           <circle cx="59" cy="48" r="5" fill="#f8fafc" />
-          {/* Pupils */}
           <circle cx="41" cy="48" r="2.2" fill="#1e293b" />
           <circle cx="59" cy="48" r="2.2" fill="#1e293b" />
-          {/* Glasses frames */}
           <rect x="33" y="43" width="16" height="11" rx="3" stroke="#1e1b4b" strokeWidth="3" fill="none" />
           <rect x="51" y="43" width="16" height="11" rx="3" stroke="#1e1b4b" strokeWidth="3" fill="none" />
-          {/* Bridge */}
           <line x1="49" y1="48" x2="52" y2="48" stroke="#1e1b4b" strokeWidth="3" />
-          {/* Eyebrows */}
           <path d="M34 40C37 38 43 38 46 41" stroke="#1e1b4b" strokeWidth="2.5" strokeLinecap="round" />
           <path d="M66 40C63 38 57 38 54 41" stroke="#1e1b4b" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Nose */}
           <path d="M48 51C48 54 50 56 52 54" stroke="#7c4a30" strokeWidth="2" strokeLinecap="round" />
-          {/* Smile */}
           <path d="M44 63C47 66 53 66 56 63" stroke="#2d221c" strokeWidth="2" strokeLinecap="round" />
         </svg>
       </div>
 
-      {/* Text block */}
       <div className="flex flex-col gap-1 min-w-0 flex-1">
         <p className="font-bold text-[0.82rem] text-[#1e1b4b] dark:text-indigo-100 leading-tight truncate">
           John Doe – Portal
@@ -74,7 +53,6 @@ export function PortalCard() {
           MAT-2233 · 2 h ago
         </span>
       </div>
-
     </div>
   );
 }
